@@ -3,4 +3,4 @@ Tweet Clustering for School Assignment
 Jacob Reid
 Helam Franco
 David Gwin
-Jorge Eslava
+Jorge Eslava - second try
