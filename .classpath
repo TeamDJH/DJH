@@ -14,5 +14,7 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="twitter4j-core-4.0.4.jar"/>
+	<classpathentry kind="lib" path="unirest-java-1.4.7.jar"/>
+	<classpathentry kind="lib" path="org.apache.httpcomponents.httpclient_4.5.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
