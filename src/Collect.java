@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import org.apache.tomcat.util.http.parser.Authorization;
@@ -236,4 +237,32 @@ public class Collect {
 	public void connect() {
 
 	}
+	
+	// Global arraylist, that will be added to 
+	static ArrayList<String> cleanList = new ArrayList();
+
+	// Method: Clean
+	// Parameters: string
+	// returns: nothing
+	// This method will be called to clean a tweet, and then
+	// add that cleaned string to the arraylist cleanList.
+	public static void Clean(String original) {
+
+		String url = "(https?|http?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+		String enter = "(\\r|\\n)";
+		String randomSymbols = "[@!&*$<>;?']"; // Leaving # out of this because it precedes key words
+
+		// example string original	
+		// String original = "Jo!hn Doe: @#marvel is lam*e! https://www.google.com/search?q=hello&oq=hello&aqs=chrome.0.69i59j69i60j69i57j69i60j69i65j69i61.818j0j7&sourceid=chrome&es_sm=93&ie=UTF-8 search shows proof.";
+
+		original = original.replaceAll(url,"");
+		original = original.replaceAll(enter,"");
+		original = original.replaceAll(randomSymbols,"");
+			
+		cleanList.add(original);
+		
+		System.out.println(original);
+			
+	}
+	
 }
