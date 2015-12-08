@@ -1,4 +1,3 @@
-
 import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.tomcat.util.http.parser.Authorization;
@@ -46,7 +46,6 @@ public class Collect {
 
 	OAuth2Token oAuth2Token;
 	Twitter twitter;
-	// TwitterStreamFactory twitFactory;
 	File file;
 	InputStream inStream;
 	OutputStream outStream;
@@ -74,11 +73,25 @@ public class Collect {
 		Twitter twitter = factory.getInstance();
 		twitter.setOAuthConsumer(consumerKey, consumerSecret);
 		twitter.setOAuthAccessToken(new AccessToken(token, tokenSecret));
-		Query query = new Query("nike");
-		QueryResult result = twitter.search(query);
-		for (Status status : result.getTweets()) {
-			Clean("@" + status.getUser().getScreenName() + ":" + status.getText());
-			System.out.println("@" + status.getUser().getScreenName() + ":" + status.getText());
+		int count = 0;
+		try {
+			Query query = new Query("marvel");
+			QueryResult result;
+			do {
+				result = twitter.search(query);
+				List<Status> tweets = result.getTweets();
+				for (Status tweet : tweets) {
+					// System.out.println("@" + tweet.getUser().getScreenName()
+					// + " - " + tweet.getText());
+					Clean(tweet.getUser().getScreenName(), tweet.getText());
+					count++;
+					System.out.println("Collecting tweet #" + count);
+				}
+			} while (count < 500);
+		} catch (TwitterException te) {
+			te.printStackTrace();
+			System.out.println("Failed to search tweets: " + te.getMessage());
+			System.exit(-1);
 		}
 
 	}
@@ -86,6 +99,7 @@ public class Collect {
 	public static void main(String[] args) throws Exception {
 
 		Collect col = new Collect();
+		Print();
 
 		// col.getAccess();
 		// "https://twitter.com/search"
@@ -236,19 +250,15 @@ public class Collect {
 
 	}
 
-	public void connect() {
-
-	}
-
 	// Global arraylist, that will be added to
-	static ArrayList<String> cleanList = new ArrayList<String>();
+	static ArrayList<Tweet> cleanList = new ArrayList<Tweet>();
 
 	// Method: Clean
 	// Parameters: string
 	// returns: nothing
 	// This method will be called to clean a tweet, and then
 	// add that cleaned string to the arraylist cleanList.
-	public static void Clean(String original) {
+	public static void Clean(String username, String text) {
 
 		String url = "(https?|http?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 		String enter = "(\\r|\\n)";
@@ -260,14 +270,21 @@ public class Collect {
 		// https://www.google.com/search?q=hello&oq=hello&aqs=chrome.0.69i59j69i60j69i57j69i60j69i65j69i61.818j0j7&sourceid=chrome&es_sm=93&ie=UTF-8
 		// search shows proof.";
 
-		original = original.replaceAll(url, "");
-		original = original.replaceAll(enter, "");
-		original = original.replaceAll(randomSymbols, "");
+		text = text.replaceAll(url, "");
+		text = text.replaceAll(enter, "");
+		text = text.replaceAll(randomSymbols, "");
+		Tweet tweet = new Tweet(username, text);
+		cleanList.add(tweet);
 
-		cleanList.add(original);
+		// System.out.println(original);
 
-		System.out.println(original);
+	}
 
+	public static void Print() {
+		for (int i = 0; i < cleanList.size(); i++) {
+			System.out.println(cleanList.get(i).getUsername() + " : " + cleanList.get(i).getText());
+
+		}
 	}
 
 }
