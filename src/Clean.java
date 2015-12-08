@@ -21,6 +21,7 @@ public class Clean {
 		int k = 0;
 		int markerStart = 0;
 		int markerEnd = 0;
+		String passer = "";
 		int temp = charArray.length - 1;
 		
 		// While looking through the array, and not find 'ê' or end of array
@@ -81,10 +82,13 @@ public class Clean {
 				i++;
 				k++;
 			}
+			
+			 passer = String.valueOf(second);
+			
 			// Debugging code
 			// for(i = 0; i <second.length; i++)
 			// {
-			//	System.out.println("Testing: " + second[i] + " ");
+			//	System.out.println("Testing: " + passer);
 			// }
 		}
 		// the url was at the end of the array, and therefore does not need the markers
@@ -97,16 +101,23 @@ public class Clean {
 				second[i] = charArray[i];
 				i++;
 			}
+			
+			 passer = String.valueOf(second);
+			
 			// Debugging code
 			// for(i = 0; i <second.length; i++)
 			// {
-			//	System.out.println("Testing: " + second[i] + " ");
+			//	System.out.println("Testing: " + passer);
 			// }
 		}
 
 	
 		// This next part will convert the char array into a string then add that string
 		// to a string array and then pass it to the Clustering.java
+		
+		// cluster(passer);
+		
+		
 	}
 
 }
