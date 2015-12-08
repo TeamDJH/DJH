@@ -239,7 +239,7 @@ public class Collect {
 	}
 	
 	// Global arraylist, that will be added to 
-	static ArrayList cleanList = new ArrayList();
+	static ArrayList<String> cleanList = new ArrayList();
 
 	// Method: Clean
 	// Parameters: string
