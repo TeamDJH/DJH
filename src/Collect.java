@@ -77,6 +77,7 @@ public class Collect {
 		Query query = new Query("nike");
 		QueryResult result = twitter.search(query);
 		for (Status status : result.getTweets()) {
+			Clean("@" + status.getUser().getScreenName() + ":" + status.getText());
 			System.out.println("@" + status.getUser().getScreenName() + ":" + status.getText());
 		}
 
@@ -105,6 +106,7 @@ public class Collect {
 	int getProperties() {
 
 		int read = 0;
+		@SuppressWarnings("unused")
 		String value = "";
 		if (file.exists()) {
 			try {
@@ -237,9 +239,9 @@ public class Collect {
 	public void connect() {
 
 	}
-	
-	// Global arraylist, that will be added to 
-	static ArrayList<String> cleanList = new ArrayList();
+
+	// Global arraylist, that will be added to
+	static ArrayList<String> cleanList = new ArrayList<String>();
 
 	// Method: Clean
 	// Parameters: string
@@ -250,19 +252,22 @@ public class Collect {
 
 		String url = "(https?|http?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 		String enter = "(\\r|\\n)";
-		String randomSymbols = "[@!&*$<>;?']"; // Leaving # out of this because it precedes key words
+		String randomSymbols = "[@!&*$<>;?']"; // Leaving # out of this because
+												// it precedes key words
 
-		// example string original	
-		// String original = "Jo!hn Doe: @#marvel is lam*e! https://www.google.com/search?q=hello&oq=hello&aqs=chrome.0.69i59j69i60j69i57j69i60j69i65j69i61.818j0j7&sourceid=chrome&es_sm=93&ie=UTF-8 search shows proof.";
+		// example string original
+		// String original = "Jo!hn Doe: @#marvel is lam*e!
+		// https://www.google.com/search?q=hello&oq=hello&aqs=chrome.0.69i59j69i60j69i57j69i60j69i65j69i61.818j0j7&sourceid=chrome&es_sm=93&ie=UTF-8
+		// search shows proof.";
 
-		original = original.replaceAll(url,"");
-		original = original.replaceAll(enter,"");
-		original = original.replaceAll(randomSymbols,"");
-			
+		original = original.replaceAll(url, "");
+		original = original.replaceAll(enter, "");
+		original = original.replaceAll(randomSymbols, "");
+
 		cleanList.add(original);
-		
+
 		System.out.println(original);
-			
+
 	}
-	
+
 }
