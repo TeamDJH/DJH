@@ -78,7 +78,6 @@ public class Collect {
 		QueryResult result = twitter.search(query);
 		for (Status status : result.getTweets()) {
 			Clean("@" + status.getUser().getScreenName() + ":" + status.getText());
-			System.out.println("@" + status.getUser().getScreenName() + ":" + status.getText());
 		}
 
 	}
