@@ -18,19 +18,19 @@ import java.util.Properties;
 
 import twitter4j.Query;
 import twitter4j.QueryResult;
-//import java.net.Inet4Address;
-//import java.net.InetAddress;
-//import java.net.NetworkInterface;
-//import java.net.URI;
-//import java.net.URL;
-//import java.util.Enumeration;
-//import java.util.List;
-//import java.util.Properties;
-//
-//import twitter4j.Query;
-//import twitter4j.QueryResult;
-//import twitter4j.RateLimitStatus;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.URI;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Properties;
+
+import twitter4j.Query;
+import twitter4j.QueryResult;
+import twitter4j.RateLimitStatus;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -327,5 +327,4 @@ public class Collect {
 	}
 	
 }
-
 
