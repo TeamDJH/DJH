@@ -1,4 +1,7 @@
+<<<<<<< a82020b096fc0ca9e2ffe3f6516e8d517c868ff0
 
+=======
+>>>>>>> the latest changes
 import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+<<<<<<< a82020b096fc0ca9e2ffe3f6516e8d517c868ff0
 //import org.apache.tomcat.util.http.parser.Authorization;
 //import org.apache.tomcat.util.net.URL;
 
@@ -31,6 +35,13 @@ import twitter4j.QueryResult;
 //import twitter4j.QueryResult;
 //import twitter4j.RateLimitStatus;
 
+=======
+import org.apache.tomcat.util.http.parser.Authorization;
+import org.apache.tomcat.util.net.URL;
+
+import twitter4j.Query;
+import twitter4j.QueryResult;
+>>>>>>> the latest changes
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -65,6 +76,7 @@ public class Collect {
 	OutputStream outStream;
 	FileInputStream fis;
 	FileOutputStream fr;
+<<<<<<< a82020b096fc0ca9e2ffe3f6516e8d517c868ff0
 
 //	URL twitUrl;
 	RequestToken requestToken;
@@ -78,6 +90,17 @@ public class Collect {
 
 	public Collect(String topic) throws TwitterException {
 
+=======
+	URL twitUrl;
+	RequestToken requestToken;
+	OAuth2Authorization oAuth2;
+	Authorization auth;
+	AccessToken accessToken;
+	Properties properties;
+	PropertyConfiguration propConf;
+
+	public Collect() throws TwitterException {
+>>>>>>> the latest changes
 		boolean getacc = false;
 		properties = new Properties();
 		file = new File("twitter.properties");
@@ -92,16 +115,22 @@ public class Collect {
 		twitter.setOAuthConsumer(consumerKey, consumerSecret);
 		twitter.setOAuthAccessToken(new AccessToken(token, tokenSecret));
 		int count = 0;
+<<<<<<< a82020b096fc0ca9e2ffe3f6516e8d517c868ff0
 
 
 		try {
 			Query query = new Query(topic);
 
+=======
+		try {
+			Query query = new Query("marvel");
+>>>>>>> the latest changes
 			QueryResult result;
 			do {
 				result = twitter.search(query);
 				List<Status> tweets = result.getTweets();
 				for (Status tweet : tweets) {
+<<<<<<< a82020b096fc0ca9e2ffe3f6516e8d517c868ff0
 
 					// System.out.println("@" +
 					// tweet.getUser().getScreenName()
@@ -113,6 +142,13 @@ public class Collect {
 
 //					System.out.println("Collecting tweet #" + count);
 //
+=======
+					// System.out.println("@" + tweet.getUser().getScreenName()
+					// + " - " + tweet.getText());
+					Clean(tweet.getUser().getScreenName(), tweet.getText());
+					count++;
+					System.out.println("Collecting tweet #" + count);
+>>>>>>> the latest changes
 				}
 			} while (count < 500);
 		} catch (TwitterException te) {
@@ -121,6 +157,7 @@ public class Collect {
 			System.exit(-1);
 		}
 
+<<<<<<< a82020b096fc0ca9e2ffe3f6516e8d517c868ff0
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -186,6 +223,62 @@ public class Collect {
 		return read;
 	}
 
+=======
+	}
+
+	public static void main(String[] args) throws Exception {
+
+		Collect col = new Collect();
+		Print();
+
+		// col.getAccess();
+		// "https://twitter.com/search"
+		// "https://api.twitter.com/1.1/search/tweets.json"
+		// + "?q=marvel"); //https://stream.twitter.com/1.1/statuses/filter.json
+
+		// if(col.getProperties())
+		// {
+		// col.connect();
+		System.out.println("open stream, token: " + col.token);
+		// String inputLine =
+		// }
+		// while ((inputLine = in.readLine()) != null)
+		// System.out.println(inputLine);
+		// in.close();
+	}
+
+	int getProperties() {
+
+		int read = 0;
+		@SuppressWarnings("unused")
+		String value = "";
+		if (file.exists()) {
+			try {
+				fis = new FileInputStream(file);
+				properties.load(fis);
+				if ((apiKey = properties.getProperty(apiKeyName)) != null)
+					read += API_KEY;
+				if ((consumerKey = properties.getProperty(consumerKeyName)) != null)
+					read += CONSUMER_KEY;
+				if ((consumerSecret = properties.getProperty(consumerSecretName)) != null)
+					read += CONSUMER_SECRET;
+				if ((token = properties.getProperty(aToken)) != null)
+					read += TOKEN;
+				if ((tokenSecret = properties.getProperty(aTokenSecret)) != null)
+					read += TOKEN_TYPE;
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					fis.close();
+				} catch (Exception ignore) {
+				}
+			}
+		}
+		return read;
+	}
+
+>>>>>>> the latest changes
 	public void getAccess() {
 		try {
 
@@ -195,8 +288,12 @@ public class Collect {
 			System.out.println("customerKey: " + consumerKey);
 			System.out.println("customerSecret: " + consumerSecret);
 			System.out.println(twitter.getAuthorization().toString());
+<<<<<<< a82020b096fc0ca9e2ffe3f6516e8d517c868ff0
 
 			requestToken = twitter.getOAuthRequestToken("oob");
+=======
+			requestToken = twitter.getOAuthRequestToken();
+>>>>>>> the latest changes
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			while (null == accessToken) {
 				System.out.println("Open the following URL and grant access to your account:");
@@ -291,6 +388,7 @@ public class Collect {
 
 	// Global arraylist, that will be added to
 	static ArrayList<Tweet> cleanList = new ArrayList<Tweet>();
+<<<<<<< a82020b096fc0ca9e2ffe3f6516e8d517c868ff0
 
 	// Method: Clean
 	// Parameters: string
@@ -311,11 +409,45 @@ public class Collect {
 		// https://www.google.com/search?q=hello&oq=hello&aqs=chrome.0.69i59j69i60j69i57j69i60j69i65j69i61.818j0j7&sourceid=chrome&es_sm=93&ie=UTF-8
 		// search shows proof.";
 
+=======
+
+	// Method: Clean
+	// Parameters: string
+	// returns: nothing
+	// This method will be called to clean a tweet, and then
+	// add that cleaned string to the arraylist cleanList.
+	public static void Clean(String username, String text) {
+
+		String url = "(https?|http?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+		String enter = "(\\r|\\n)";
+		String randomSymbols = "[@!&*$<>;?']"; // Leaving # out of this because
+												// it precedes key words
+
+		// example string original
+		// String original = "Jo!hn Doe: @#marvel is lam*e!
+		// https://www.google.com/search?q=hello&oq=hello&aqs=chrome.0.69i59j69i60j69i57j69i60j69i65j69i61.818j0j7&sourceid=chrome&es_sm=93&ie=UTF-8
+		// search shows proof.";
+
+>>>>>>> the latest changes
 		text = text.replaceAll(url, "");
 		text = text.replaceAll(enter, "");
 		text = text.replaceAll(randomSymbols, "");
 		Tweet tweet = new Tweet(username, text);
 		cleanList.add(tweet);
+<<<<<<< a82020b096fc0ca9e2ffe3f6516e8d517c868ff0
+=======
+
+		// System.out.println(original);
+
+	}
+
+	public static void Print() {
+		for (int i = 0; i < cleanList.size(); i++) {
+			System.out.println(cleanList.get(i).getUsername() + " : " + cleanList.get(i).getText());
+
+		}
+	}
+>>>>>>> the latest changes
 
 	}
 
@@ -327,5 +459,8 @@ public class Collect {
 	}
 	
 }
+<<<<<<< a82020b096fc0ca9e2ffe3f6516e8d517c868ff0
 
 
+=======
+>>>>>>> the latest changes
