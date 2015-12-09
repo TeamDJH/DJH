@@ -268,9 +268,11 @@ public class Collect {
 
 		String url = "(https?|http?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 		String enter = "(\\r|\\n)";
-		String randomSymbols = "[@!&*$<>;?']"; // Leaving # out of this because
-												// it precedes key words
-
+		String randomSymbols = "[@!&*$<>;?']"; // Leaving # out of this because it precedes key words
+		// This should block any of the profanity
+		// sorry for spelling them out here
+		String beep = "[^!@#$%^&*]*(ass|shit|butthole|cock|penis|pennis|fucker|fuck|crap|cunt|bitch|whore|bastard|vagina)[^!@#$%^&*]*";
+		
 		// example string original
 		// String original = "Jo!hn Doe: @#marvel is lam*e!
 		// https://www.google.com/search?q=hello&oq=hello&aqs=chrome.0.69i59j69i60j69i57j69i60j69i65j69i61.818j0j7&sourceid=chrome&es_sm=93&ie=UTF-8
@@ -281,8 +283,6 @@ public class Collect {
 		text = text.replaceAll(randomSymbols, "");
 		Tweet tweet = new Tweet(username, text);
 		cleanList.add(tweet);
-
-		// System.out.println(original);
 
 	}
 
