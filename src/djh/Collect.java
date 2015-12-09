@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
 
@@ -68,7 +69,7 @@ public class Collect {
 	Properties properties;
 	PropertyConfiguration propConf;
 
-	private ArrayList<Tweet> list = new ArrayList<Tweet>();
+	private static ArrayList<Tweet> list = new ArrayList<Tweet>();
 
 	public Collect(String topic) {
 		boolean getacc = false;
@@ -96,6 +97,8 @@ public class Collect {
 					count++;
 				}
 			} while (count < 50);
+			// Test
+			duplicateClean();
 		} catch (TwitterException te) {
 			te.printStackTrace();
 			System.out.println("Failed to search tweets: " + te.getMessage());
@@ -236,4 +239,26 @@ public class Collect {
 		Tweet tweet = new Tweet(username, text);
 		return tweet;
 	}
+	
+	// testing method to clean up duplicates
+	// adds list to a set, cleans the duplicates
+	// then changes set back to list
+	public static void duplicateClean()
+	{
+		// Creating LinkedHashSet
+	     LinkedHashSet<Tweet> lhs = new LinkedHashSet<Tweet>();
+	 
+	     /* Adding ArrayList elements to the LinkedHashSet
+	      * in order to remove the duplicate elements and 
+	      * to preserve the insertion order.
+	      */
+	     lhs.addAll(list);
+	  
+	     // Removing ArrayList elements
+	     list.clear();
+	 
+	     // Adding LinkedHashSet elements to the ArrayList
+	     list.addAll(lhs);
+	}
+	
 }
