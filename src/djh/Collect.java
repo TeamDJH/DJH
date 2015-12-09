@@ -95,7 +95,7 @@ public class Collect {
 					list.add(tweet);
 					count++;
 				}
-			} while (count < 10);
+			} while (count < 50);
 		} catch (TwitterException te) {
 			te.printStackTrace();
 			System.out.println("Failed to search tweets: " + te.getMessage());
