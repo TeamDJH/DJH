@@ -29,6 +29,7 @@ import twitter4j.QueryResult;
 //import twitter4j.Query;
 //import twitter4j.QueryResult;
 //import twitter4j.RateLimitStatus;
+
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -63,16 +64,15 @@ public class Collect {
 	OutputStream outStream;
 	FileInputStream fis;
 	FileOutputStream fr;
-
 //	URL twitUrl;
 	RequestToken requestToken;
 	OAuth2Authorization oAuth2;
 //	Authorization auth;
 
+
 	AccessToken accessToken;
 	Properties properties;
 	PropertyConfiguration propConf;
-
 
 	public Collect(String topic) throws TwitterException {
 
@@ -101,16 +101,12 @@ public class Collect {
 				List<Status> tweets = result.getTweets();
 				for (Status tweet : tweets) {
 
-					// System.out.println("@" +
-					// tweet.getUser().getScreenName()
-					// + " - " + tweet.getText());
 					Clean(tweet.getUser().getScreenName(), tweet.getText());
 					count++;
 					System.out.println("Tweet #" + count + " about " + topic);
 
 
-//					System.out.println("Collecting tweet #" + count);
-//
+
 				}
 			} while (count < 500);
 		} catch (TwitterException te) {
@@ -122,7 +118,6 @@ public class Collect {
 	}
 
 	public static void main(String[] args) throws Exception {
-
 		for (int i = 0; i < args.length; i++) {
 			Collect col = new Collect(args[i]);
 			Print(col);
@@ -137,7 +132,6 @@ public class Collect {
 		// if(col.getProperties())
 		// {
 		// col.connect();
-
 		// System.out.println("open stream, token: " + col.token);
 
 		// String inputLine =
@@ -150,7 +144,6 @@ public class Collect {
 	int getProperties() {
 
 		int read = 0;
-
 		if (file.exists()) {
 			try {
 				fis = new FileInputStream(file);
@@ -324,4 +317,3 @@ public class Collect {
 	}
 	
 }
-
