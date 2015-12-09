@@ -193,7 +193,6 @@ public class Collect {
 			System.out.println("customerKey: " + consumerKey);
 			System.out.println("customerSecret: " + consumerSecret);
 			System.out.println(twitter.getAuthorization().toString());
-
 			requestToken = twitter.getOAuthRequestToken("oob");
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			while (null == accessToken) {
