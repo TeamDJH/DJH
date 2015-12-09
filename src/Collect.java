@@ -59,7 +59,7 @@ public class Collect {
 	Properties properties;
 	PropertyConfiguration propConf;
 
-	public Collect() throws TwitterException {
+	public Collect(String firstTweet, String secondTweet) throws TwitterException {
 		boolean getacc = false;
 		properties = new Properties();
 		file = new File("twitter.properties");
@@ -74,31 +74,37 @@ public class Collect {
 		twitter.setOAuthConsumer(consumerKey, consumerSecret);
 		twitter.setOAuthAccessToken(new AccessToken(token, tokenSecret));
 		int count = 0;
-		try {
-			Query query = new Query("marvel");
-			QueryResult result;
-			do {
-				result = twitter.search(query);
-				List<Status> tweets = result.getTweets();
-				for (Status tweet : tweets) {
-					// System.out.println("@" + tweet.getUser().getScreenName()
-					// + " - " + tweet.getText());
-					Clean(tweet.getUser().getScreenName(), tweet.getText());
-					count++;
-					System.out.println("Collecting tweet #" + count);
-				}
-			} while (count < 500);
-		} catch (TwitterException te) {
-			te.printStackTrace();
-			System.out.println("Failed to search tweets: " + te.getMessage());
-			System.exit(-1);
+		
+		String[] tweetNames = {firstTweet, secondTweet};
+		
+		for(int i = 0; i < 2; i++)
+		{
+			try {
+				Query query = new Query(tweetNames[i]);
+				QueryResult result;
+				do {
+					result = twitter.search(query);
+					List<Status> tweets = result.getTweets();
+					for (Status tweet : tweets) {
+						// System.out.println("@" + tweet.getUser().getScreenName()
+						// + " - " + tweet.getText());
+						Clean(tweet.getUser().getScreenName(), tweet.getText());
+						count++;
+						System.out.println("Collecting tweet #" + count);
+					}
+				} while (count < 500);
+			} catch (TwitterException te) {
+				te.printStackTrace();
+				System.out.println("Failed to search tweets: " + te.getMessage());
+				System.exit(-1);
+			}
 		}
 
 	}
 
 	public static void main(String[] args) throws Exception {
 
-		Collect col = new Collect();
+		Collect col = new Collect(args[0],args[1]);
 		Print();
 
 		// col.getAccess();
