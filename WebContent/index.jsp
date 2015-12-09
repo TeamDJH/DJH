@@ -27,6 +27,7 @@
 	<h1>Welcome to Team DJH's Twitter Project!</h1>
 	<form>Enter topic: <input name="topic" onkeypress="pressedKey(event)" value="<%=topicParam%>"></form>
 	</header>
+	<div id = "content">
 	<div id="topics">
 	<script>
 		var clusters = [];
@@ -44,7 +45,7 @@
 			
 			var cluster = clusterMap[topic];
 			var tweets = cluster.tweets;
-			var html = "<h2>Tweets</h2>";
+			var html = "<h3>" + topic.toUpperCase() + "</h3>";
 			
 			for(var i=0; i<tweets.length; i++) {
 				html += "<p>" + tweets[i] + "</p>";
@@ -89,7 +90,7 @@
 		displayTweets(clusters[0].topic);
 	</script>
 	</div>
-	
+	</div>
 <h3 id="show" tabindex="0">Show XML</h3>
 <div id="XML" >
 <pre><%=clu.getXML().replaceAll("<","&lt;").replaceAll(">","&gt;")%></pre>
