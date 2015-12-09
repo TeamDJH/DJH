@@ -281,6 +281,7 @@ public class Collect {
 		text = text.replaceAll(url, "");
 		text = text.replaceAll(enter, "");
 		text = text.replaceAll(randomSymbols, "");
+		text = text.replaceAll(beep,"-beep-");
 		Tweet tweet = new Tweet(username, text);
 		cleanList.add(tweet);
 
