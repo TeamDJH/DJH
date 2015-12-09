@@ -1,0 +1,39 @@
+body{
+	background-color: A1D6E3;
+	display: block;
+	margin: 0px 150px;
+}
+
+header{
+	text-align: center;
+}
+
+#topics{
+	display: block;
+	width: 30%;
+	float: left;
+	
+}
+
+#tweets{
+	display: block;
+	width: 70%;
+	float: left;
+}
+
+form{
+	font-size: 24px;
+	font-weight: bold;
+}
+input{
+	font-size: 24px;
+}
+#XML{
+	display: none;
+}
+#hide:focus ~ #XML {
+  display: none;
+}
+#show:focus ~ #XML {
+  display: block;
+}

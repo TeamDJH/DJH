@@ -20,11 +20,14 @@
 <html>
 	<head>
 	<title>DJH</title>
+	<link type="text/css"rel="stylesheet" href="styles.css">  
 	</head>
 	<body>
+	<header>
 	<h1>Welcome to Team DJH's Twitter Project!</h1>
 	<form>Enter topic: <input name="topic" onkeypress="pressedKey(event)" value="<%=topicParam%>"></form>
-	<div>
+	</header>
+	<div id="topics">
 	<script>
 		var clusters = [];
 		var clusterMap = {};
@@ -38,9 +41,10 @@
 		
 		
 		function displayTweets(topic) {
+			
 			var cluster = clusterMap[topic];
 			var tweets = cluster.tweets;
-			var html = "<h3>" + topic.toUpperCase() + "</h3>";
+			var html = "<h2>Tweets</h2>";
 			
 			for(var i=0; i<tweets.length; i++) {
 				html += "<p>" + tweets[i] + "</p>";
@@ -50,7 +54,6 @@
 		}
 	</script>
 	<% if(clusters != null) { %>
-	<ul>
 		<% for(int i = 0; i<clusters.length(); i++){
 				JSONObject cluster = clusters.getJSONObject(i);
 				JSONArray sentences = cluster.getJSONArray("clusteredSentences");
@@ -76,18 +79,21 @@
 			clusters.push(cluster);
 			clusterMap[cluster.topic] = cluster;
 		</script>
-		<li><a href="javascript:void(0)" onClick="displayTweets('<%=topic%>')"><%=topic%> (<%=cluster.getInt("clusterSize")%>)</a></li>
+		<h3><a href="javascript:void(0)" onClick="displayTweets('<%=topic%>')"><%=topic%> (<%=cluster.getInt("clusterSize")%>)</a></h3>
 		<% }} %>
-	</ul>
 	</div>
 	<div id="tweets">
+	<h2>Tweets</h2>
 	
-	</div>
 	<script>
 		displayTweets(clusters[0].topic);
 	</script>
-	<h3>XML</h3>
-	<pre><%=	clu.getXML().replaceAll("<","&lt;").replaceAll(">","&gt;")%></pre>
-	<% } %>
+	</div>
+	
+<h3 id="show" tabindex="0">Show XML</h3>
+<div id="XML" >
+<pre><%=clu.getXML().replaceAll("<","&lt;").replaceAll(">","&gt;")%></pre>
+</div>
+<% } %>
 	</body>
 </html>

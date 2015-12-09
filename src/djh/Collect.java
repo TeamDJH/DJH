@@ -31,20 +31,27 @@ import twitter4j.conf.PropertyConfiguration;
 
 public class Collect {
 	static final int API_KEY = 1, CONSUMER_KEY = 2, CONSUMER_SECRET = 4, TOKEN = 8, TOKEN_TYPE = 16, ALL_KEYS = 31;
-	String userid = "djh_cs3250@yahoo.com", password = "djh3250djh3250",
-			url = "https://api.twitter.com/1.1/search/tweets.json",
-			filterUrl = "https://stream.twitter.com/1.1/statuses/filter.json",
-			requestParam = "?track=\"marvel, dc commics\"", apiKey = "", consumerKey = "", consumerSecret = "",
-			token = "", tokenSecret = "", apiK = "apiKey", consumer = "oauth.consumerKey",
-			consumerSec = "oauth.consumerSecret", aToken = "oauth.accessToken",
-			aTokenSecret = "oauth.accessTokenSecret", app_only_authentication = "https://api.twitter.com/oauth2/token",
-			request_token_URL = "https://api.twitter.com/oauth/request_token",
-			authorize_URL = "https://api.twitter.com/oauth/authorize",
-			access_token_URL = "https://api.twitter.com/oauth/access_token";
 
+	String userid = "djh_cs3250@yahoo.com";
+	String password = "djh3250djh3250";
+	String url = "https://api.twitter.com/1.1/search/tweets.json";
+	String filterUrl = "https://stream.twitter.com/1.1/statuses/filter.json";
+	String consumer = "oauth.consumerKey";
+	String consumerSec = "oauth.consumerSecret";
+	String aToken = "oauth.accessToken";
+	String aTokenSecret = "oauth.accessTokenSecret";
+	String app_only_authentication = "https://api.twitter.com/oauth2/token";
+	String request_token_URL = "https://api.twitter.com/oauth/request_token";
+	String authorize_URL = "https://api.twitter.com/oauth/authorize";
+	String access_token_URL = "https://api.twitter.com/oauth/access_token";
 	String consumerKeyName = "oauth.consumerKey";
 	String consumerSecretName = "oauth.consumerSecret";
 	String apiKeyName = "apiKey";
+	String apiKey = "";
+	String consumerKey = "";
+	String consumerSecret = "";
+	String token = "";
+	String tokenSecret = "";
 
 	OAuth2Token oAuth2Token;
 	Twitter twitter;
@@ -60,11 +67,11 @@ public class Collect {
 	AccessToken accessToken;
 	Properties properties;
 	PropertyConfiguration propConf;
+
 	private ArrayList<Tweet> list = new ArrayList<Tweet>();
 
-	public Collect(String topic) throws TwitterException {
+	public Collect(String topic) {
 		boolean getacc = false;
-
 		properties = new Properties();
 		file = new File("twitter.properties");
 		if (getProperties() < ALL_KEYS)
@@ -72,28 +79,21 @@ public class Collect {
 		propConf = new PropertyConfiguration(properties);
 		if (getacc)
 			getAccess();
-		// twitFactory = new TwitterStreamFactory(propConf);
 		TwitterFactory factory = new TwitterFactory();
 		Twitter twitter = factory.getInstance();
 		twitter.setOAuthConsumer(consumerKey, consumerSecret);
 		twitter.setOAuthAccessToken(new AccessToken(token, tokenSecret));
 		int count = 0;
-
 		try {
-			Query query = new Query(topic);
+			Query query = new Query(topic + " +exclude:retweets");
 			QueryResult result;
 			do {
 				result = twitter.search(query);
 				List<Status> statuses = result.getTweets();
 				for (Status status : statuses) {
-					// System.out.println("@" +
-					// tweet.getUser().getScreenName()
-					// + " - " + tweet.getText());
 					Tweet tweet = Clean(status.getUser().getScreenName(), status.getText());
 					list.add(tweet);
 					count++;
-					// System.out.println("Tweet #" + count + " about " +
-					// topic);
 				}
 			} while (count < 10);
 		} catch (TwitterException te) {
@@ -101,14 +101,14 @@ public class Collect {
 			System.out.println("Failed to search tweets: " + te.getMessage());
 			System.exit(-1);
 		}
+	}
 
+	public ArrayList<Tweet> getList() {
+		return list;
 	}
 
 	int getProperties() {
-
 		int read = 0;
-		@SuppressWarnings("unused")
-		String value = "";
 		try {
 			InputStream in = this.getClass().getClassLoader().getResourceAsStream("twitter.properties");
 			properties.load(in);
@@ -135,10 +135,7 @@ public class Collect {
 
 	public void getAccess() {
 		try {
-
 			twitter = new TwitterFactory(propConf).getInstance();
-
-			// twitter.setOAuthConsumer(consumerKey, consumerSecret);
 			System.out.println("customerKey: " + consumerKey);
 			System.out.println("customerSecret: " + consumerSecret);
 			System.out.println(twitter.getAuthorization().toString());
@@ -203,26 +200,17 @@ public class Collect {
 			System.out.println("Failed to read the system input.");
 			System.exit(-1);
 		}
-
-		// oAuth2 = new OAuth2Authorization(propConf);
-		// try{
-		// oAuth2Token = oAuth2.getOAuth2Token();
-		// }catch(Exception e)
-		// {
-		// e.printStackTrace();
-		// }
 	}
 
 	public void writeProperties() {
 		try {
-			properties.setProperty(apiK, apiKey);
+			properties.setProperty(apiKeyName, apiKey);
 			properties.setProperty(consumer, consumerKey);
 			properties.setProperty(consumerSec, consumerSecret);
 			properties.setProperty(aToken, oAuth2Token.getAccessToken());
 			properties.setProperty(aTokenSecret, oAuth2Token.getTokenType());
 			fr = new FileOutputStream(file);
 			properties.store(fr, "twitter.properties");
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -230,64 +218,22 @@ public class Collect {
 				fr.close();
 			} catch (Exception ignore) {
 			}
-
 		}
-
 	}
 
-	// Method: Clean
-	// Parameters: string
-	// returns: nothing
-	// This method will be called to clean a tweet, and then
-	// add that cleaned string to the arraylist cleanList.
 	public static Tweet Clean(String username, String text) {
-
 		String url = "(https?|http?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 		String enter = "(\\r|\\n)";
-		String randomSymbols = "[@!&*$<>;?']"; // Leaving # out of this because
-												// it precedes key words
-		// This should block any of the profanity
-		// sorry for spelling them out here
-		String beep = "[^!@#$%^&*]*(ass|shit|butthole|cock|penis|pennis|fucker|fuck|crap|cunt|bitch|whore|bastard|vagina)[^!@#$%^&*]*";
+		String randomSymbols = "[!&*$<>;?'’]";
+		// This should block any of the profanity sorry for spelling them out
+		String beep = "[^!@#$%^&*]*(ass|shit|butthole|cock|penis|pennis|fucker|fuck|crap|cunt|bitch|whore|bastard|vagina|sex|rape|porn|hardcore|lingeries|panties|blowjob|boob|boobs|horny|pussy|nude|cum)[^!@#$%^&*]*";
 
-		// example string original
-		// String original = "Jo!hn Doe: @#marvel is lam*e!
-		// https://www.google.com/search?q=hello&oq=hello&aqs=chrome.0.69i59j69i60j69i57j69i60j69i65j69i61.818j0j7&sourceid=chrome&es_sm=93&ie=UTF-8
-		// search shows proof.";
-
+		text = text.toLowerCase();
 		text = text.replaceAll(url, "");
 		text = text.replaceAll(enter, "");
 		text = text.replaceAll(randomSymbols, "");
-		text = text.replaceAll(beep,"-beep-");
+		text = text.replaceAll(beep, "-beep-");
 		Tweet tweet = new Tweet(username, text);
 		return tweet;
-
 	}
-
-	public ArrayList<Tweet> getList() {
-		return list;
-	}
-
-	public static void main(String[] args) throws Exception {
-		for (int i = 0; i < args.length; i++) {
-			Collect col = new Collect(args[i]);
-			Cluster cluster = new Cluster(col.getList());
-		}
-
-		// col.getAccess();
-		// "https://twitter.com/search"
-		// "https://api.twitter.com/1.1/search/tweets.json"
-		// + "?q=marvel"); //https://stream.twitter.com/1.1/statuses/filter.json
-
-		// if(col.getProperties())
-		// {
-		// col.connect();
-		// System.out.println("open stream, token: " + col.token);
-		// String inputLine =
-		// }
-		// while ((inputLine = in.readLine()) != null)
-		// System.out.println(inputLine);
-		// in.close();
-	}
-
 }
