@@ -10,15 +10,18 @@ header{
 
 #topics{
 	display: block;
-	width: 30%;
+	width: calc(30% - 46px);
 	float: left;
+	border-style: solid;
+	padding: 0px 20px;
 	
 }
 
 #tweets{
 	display: block;
-	width: 70%;
+	width: calc(70% - 40px);
 	float: left;
+	padding: 0px 20px;
 }
 
 form{
