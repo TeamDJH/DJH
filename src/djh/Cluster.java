@@ -31,7 +31,7 @@ public class Cluster {
 
 	private JSONObject stuff;
 
-	public Cluster(ArrayList<Tweet> list) throws UnirestException {
+	public Cluster(ArrayList<Tweet> list) {
 		JSONObject body = new JSONObject();
 		JSONArray text = new JSONArray();
 		body.put("type", "pre-sentenced");
@@ -41,21 +41,21 @@ public class Cluster {
 			candy.put("sentence", tweet.getText());
 			text.put(candy);
 		}
-		// FRk8NLuhbymshi1CWCbaejNQQqB4p1mtS9ojsnXUCGHYjxW6Nt
-		// These code snippets use an open-source library.
-		// http://unirest.io/java
-		HttpResponse<JsonNode> response = Unirest.post("https://rxnlp-core.p.mashape.com/generateClusters")
-				.header("X-Mashape-Key", "FRk8NLuhbymshi1CWCbaejNQQqB4p1mtS9ojsnXUCGHYjxW6Nt")
-				.header("Content-Type", "application/json").header("Accept", "application/json").body(body.toString())
-				.asJson();
+		HttpResponse<JsonNode> response = null;
+		try {
+			response = Unirest.post("https://rxnlp-core.p.mashape.com/generateClusters")
+					.header("X-Mashape-Key", "FRk8NLuhbymshi1CWCbaejNQQqB4p1mtS9ojsnXUCGHYjxW6Nt")
+					.header("Content-Type", "application/json").header("Accept", "application/json")
+					.body(body.toString()).asJson();
+		} catch (UnirestException e) {
+			e.printStackTrace();
+		}
 
 		// retrieve the parsed JSONObject from the response
 		stuff = response.getBody().getObject();
 		JSONObject results = stuff.getJSONObject("results");
 		JSONArray clusters = results.getJSONArray("clusters");
 
-		// String xml = XML.toString(results);
-		// System.out.println(xml);
 		for (int i = 0; i < clusters.length(); i++) {
 			JSONObject cluster = clusters.getJSONObject(i);
 			JSONArray sentences = cluster.getJSONArray("clusteredSentences");
@@ -67,9 +67,7 @@ public class Cluster {
 				Tweet tweet = list.get(tweetIndex);
 				sentence = tweet.getUsername() + " : " + tweet.getText();
 				sentences.put(j, sentence);
-				System.out.println(sentence);
 			}
-			// System.out.println(clusters.get(i));
 		}
 	}
 
@@ -112,9 +110,5 @@ public class Cluster {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	public static void main(String[] args) throws UnirestException {
-
 	}
 }
