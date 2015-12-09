@@ -16,6 +16,16 @@
 	<classpathentry kind="lib" path="twitter4j-core-4.0.4.jar"/>
 	<classpathentry kind="lib" path="unirest-java-1.4.7.jar"/>
 	<classpathentry kind="lib" path="org.apache.httpcomponents.httpclient_4.5.1.jar"/>
+<<<<<<< HEAD
+<<<<<<< 409b496af193402664ad6739281507992566fc6e
+<<<<<<< a82020b096fc0ca9e2ffe3f6516e8d517c868ff0
+=======
+<<<<<<< e164fdf4bc3bea7001717f0a5adcd42c61171055
+>>>>>>> the latest changes
 	<classpathentry kind="lib" path="org.json-20150729.jar"/>
+=======
+>>>>>>> the latest changes
+=======
+>>>>>>> a5e03a742983c09c0d03c0fb13d338f688627d8b
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

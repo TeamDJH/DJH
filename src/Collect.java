@@ -1,3 +1,4 @@
+
 import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,12 +12,24 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
-import org.apache.tomcat.util.http.parser.Authorization;
-import org.apache.tomcat.util.net.URL;
-
+//
+//import org.apache.tomcat.util.http.parser.Authorization;
+//import org.apache.tomcat.util.net.URL;
 import twitter4j.Query;
 import twitter4j.QueryResult;
+//import java.net.Inet4Address;
+//import java.net.InetAddress;
+//import java.net.NetworkInterface;
+//import java.net.URI;
+//import java.net.URL;
+//import java.util.Enumeration;
+//import java.util.List;
+//import java.util.Properties;
+//
+//import twitter4j.Query;
+//import twitter4j.QueryResult;
+//import twitter4j.RateLimitStatus;
+
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -51,15 +64,18 @@ public class Collect {
 	OutputStream outStream;
 	FileInputStream fis;
 	FileOutputStream fr;
-	URL twitUrl;
+//	URL twitUrl;
 	RequestToken requestToken;
 	OAuth2Authorization oAuth2;
-	Authorization auth;
+//	Authorization auth;
+
+
 	AccessToken accessToken;
 	Properties properties;
 	PropertyConfiguration propConf;
 
 	public Collect(String topic) throws TwitterException {
+
 		boolean getacc = false;
 		properties = new Properties();
 		file = new File("twitter.properties");
@@ -75,19 +91,22 @@ public class Collect {
 		twitter.setOAuthAccessToken(new AccessToken(token, tokenSecret));
 		int count = 0;
 
+
 		try {
 			Query query = new Query(topic);
+
 			QueryResult result;
 			do {
 				result = twitter.search(query);
 				List<Status> tweets = result.getTweets();
 				for (Status tweet : tweets) {
-					// System.out.println("@" +
-					// tweet.getUser().getScreenName()
-					// + " - " + tweet.getText());
+
 					Clean(tweet.getUser().getScreenName(), tweet.getText());
 					count++;
 					System.out.println("Tweet #" + count + " about " + topic);
+
+
+
 				}
 			} while (count < 500);
 		} catch (TwitterException te) {
@@ -104,6 +123,7 @@ public class Collect {
 			Print(col);
 		}
 
+
 		// col.getAccess();
 		// "https://twitter.com/search"
 		// "https://api.twitter.com/1.1/search/tweets.json"
@@ -113,6 +133,7 @@ public class Collect {
 		// {
 		// col.connect();
 		// System.out.println("open stream, token: " + col.token);
+
 		// String inputLine =
 		// }
 		// while ((inputLine = in.readLine()) != null)
@@ -123,8 +144,6 @@ public class Collect {
 	int getProperties() {
 
 		int read = 0;
-		@SuppressWarnings("unused")
-		String value = "";
 		if (file.exists()) {
 			try {
 				fis = new FileInputStream(file);
@@ -148,6 +167,13 @@ public class Collect {
 				}
 			}
 		}
+		else{	
+			System.out.println("the file dosen't exist!");
+		       System.out.println("Working Directory = " +
+		              System.getProperty("user.dir"));
+			writeProperties();
+		}
+
 		return read;
 	}
 
@@ -160,7 +186,7 @@ public class Collect {
 			System.out.println("customerKey: " + consumerKey);
 			System.out.println("customerSecret: " + consumerSecret);
 			System.out.println(twitter.getAuthorization().toString());
-			requestToken = twitter.getOAuthRequestToken();
+			requestToken = twitter.getOAuthRequestToken("oob");
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			while (null == accessToken) {
 				System.out.println("Open the following URL and grant access to your account:");
@@ -290,5 +316,5 @@ public class Collect {
 
 		}
 	}
-
+	
 }
