@@ -59,7 +59,7 @@ public class Collect {
 	Properties properties;
 	PropertyConfiguration propConf;
 
-	public Collect(String firstTweet, String secondTweet) throws TwitterException {
+	public Collect(String topic) throws TwitterException {
 		boolean getacc = false;
 		properties = new Properties();
 		file = new File("twitter.properties");
@@ -74,38 +74,35 @@ public class Collect {
 		twitter.setOAuthConsumer(consumerKey, consumerSecret);
 		twitter.setOAuthAccessToken(new AccessToken(token, tokenSecret));
 		int count = 0;
-		
-		String[] tweetNames = {firstTweet, secondTweet};
-		
-		for(int i = 0; i < 2; i++)
-		{
-			try {
-				Query query = new Query(tweetNames[i]);
-				QueryResult result;
-				do {
-					result = twitter.search(query);
-					List<Status> tweets = result.getTweets();
-					for (Status tweet : tweets) {
-						// System.out.println("@" + tweet.getUser().getScreenName()
-						// + " - " + tweet.getText());
-						Clean(tweet.getUser().getScreenName(), tweet.getText());
-						count++;
-						System.out.println("Collecting tweet #" + count);
-					}
-				} while (count < 500);
-			} catch (TwitterException te) {
-				te.printStackTrace();
-				System.out.println("Failed to search tweets: " + te.getMessage());
-				System.exit(-1);
-			}
+
+		try {
+			Query query = new Query(topic);
+			QueryResult result;
+			do {
+				result = twitter.search(query);
+				List<Status> tweets = result.getTweets();
+				for (Status tweet : tweets) {
+					// System.out.println("@" +
+					// tweet.getUser().getScreenName()
+					// + " - " + tweet.getText());
+					Clean(tweet.getUser().getScreenName(), tweet.getText());
+					count++;
+					System.out.println("Tweet #" + count + " about " + topic);
+				}
+			} while (count < 500);
+		} catch (TwitterException te) {
+			te.printStackTrace();
+			System.out.println("Failed to search tweets: " + te.getMessage());
+			System.exit(-1);
 		}
 
 	}
 
 	public static void main(String[] args) throws Exception {
-
-		Collect col = new Collect(args[0],args[1]);
-		Print();
+		for (int i = 0; i < args.length; i++) {
+			Collect col = new Collect(args[i]);
+			Print(col);
+		}
 
 		// col.getAccess();
 		// "https://twitter.com/search"
@@ -115,7 +112,7 @@ public class Collect {
 		// if(col.getProperties())
 		// {
 		// col.connect();
-		System.out.println("open stream, token: " + col.token);
+		// System.out.println("open stream, token: " + col.token);
 		// String inputLine =
 		// }
 		// while ((inputLine = in.readLine()) != null)
@@ -286,9 +283,9 @@ public class Collect {
 
 	}
 
-	public static void Print() {
-		for (int i = 0; i < cleanList.size(); i++) {
-			System.out.println(cleanList.get(i).getUsername() + " : " + cleanList.get(i).getText());
+	public static void Print(Collect col) {
+		for (int i = 0; i < col.cleanList.size(); i++) {
+			System.out.println(col.cleanList.get(i).getUsername() + " : " + col.cleanList.get(i).getText());
 
 		}
 	}
