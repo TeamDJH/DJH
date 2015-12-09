@@ -8,6 +8,10 @@ header{
 	text-align: center;
 }
 
+#content{
+	min-height: 75%;
+}
+
 #topics{
 	display: block;
 	width: calc(30% - 46px);
