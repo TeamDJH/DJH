@@ -17,5 +17,11 @@
 	<classpathentry kind="lib" path="unirest-java-1.4.7.jar"/>
 	<classpathentry kind="lib" path="org.apache.httpcomponents.httpclient_4.5.1.jar"/>
 	<classpathentry kind="lib" path="org.json-20150729.jar"/>
+	<classpathentry kind="lib" path="httpcore-4.4.4.jar"/>
+	<classpathentry kind="lib" path="commons-cli-1.2.jar"/>
+	<classpathentry kind="lib" path="httpcore-ab-4.4.4.jar"/>
+	<classpathentry kind="lib" path="httpcore-nio-4.4.4.jar"/>
+	<classpathentry kind="lib" path="httpasyncclient-4.0-beta4.jar"/>
+	<classpathentry kind="lib" path="commons-logging-1.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

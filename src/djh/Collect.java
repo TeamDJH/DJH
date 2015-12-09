@@ -1,3 +1,5 @@
+package djh;
+
 import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
@@ -58,9 +60,11 @@ public class Collect {
 	AccessToken accessToken;
 	Properties properties;
 	PropertyConfiguration propConf;
+	private ArrayList<Tweet> list = new ArrayList<Tweet>();
 
 	public Collect(String topic) throws TwitterException {
 		boolean getacc = false;
+
 		properties = new Properties();
 		file = new File("twitter.properties");
 		if (getProperties() < ALL_KEYS)
@@ -80,16 +84,18 @@ public class Collect {
 			QueryResult result;
 			do {
 				result = twitter.search(query);
-				List<Status> tweets = result.getTweets();
-				for (Status tweet : tweets) {
+				List<Status> statuses = result.getTweets();
+				for (Status status : statuses) {
 					// System.out.println("@" +
 					// tweet.getUser().getScreenName()
 					// + " - " + tweet.getText());
-					Clean(tweet.getUser().getScreenName(), tweet.getText());
+					Tweet tweet = Clean(status.getUser().getScreenName(), status.getText());
+					list.add(tweet);
 					count++;
-					System.out.println("Tweet #" + count + " about " + topic);
+					// System.out.println("Tweet #" + count + " about " +
+					// topic);
 				}
-			} while (count < 500);
+			} while (count < 10);
 		} catch (TwitterException te) {
 			te.printStackTrace();
 			System.out.println("Failed to search tweets: " + te.getMessage());
@@ -98,54 +104,30 @@ public class Collect {
 
 	}
 
-	public static void main(String[] args) throws Exception {
-		for (int i = 0; i < args.length; i++) {
-			Collect col = new Collect(args[i]);
-			Print(col);
-		}
-
-		// col.getAccess();
-		// "https://twitter.com/search"
-		// "https://api.twitter.com/1.1/search/tweets.json"
-		// + "?q=marvel"); //https://stream.twitter.com/1.1/statuses/filter.json
-
-		// if(col.getProperties())
-		// {
-		// col.connect();
-		// System.out.println("open stream, token: " + col.token);
-		// String inputLine =
-		// }
-		// while ((inputLine = in.readLine()) != null)
-		// System.out.println(inputLine);
-		// in.close();
-	}
-
 	int getProperties() {
 
 		int read = 0;
 		@SuppressWarnings("unused")
 		String value = "";
-		if (file.exists()) {
+		try {
+			InputStream in = this.getClass().getClassLoader().getResourceAsStream("twitter.properties");
+			properties.load(in);
+			if ((apiKey = properties.getProperty(apiKeyName)) != null)
+				read += API_KEY;
+			if ((consumerKey = properties.getProperty(consumerKeyName)) != null)
+				read += CONSUMER_KEY;
+			if ((consumerSecret = properties.getProperty(consumerSecretName)) != null)
+				read += CONSUMER_SECRET;
+			if ((token = properties.getProperty(aToken)) != null)
+				read += TOKEN;
+			if ((tokenSecret = properties.getProperty(aTokenSecret)) != null)
+				read += TOKEN_TYPE;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
 			try {
-				fis = new FileInputStream(file);
-				properties.load(fis);
-				if ((apiKey = properties.getProperty(apiKeyName)) != null)
-					read += API_KEY;
-				if ((consumerKey = properties.getProperty(consumerKeyName)) != null)
-					read += CONSUMER_KEY;
-				if ((consumerSecret = properties.getProperty(consumerSecretName)) != null)
-					read += CONSUMER_SECRET;
-				if ((token = properties.getProperty(aToken)) != null)
-					read += TOKEN;
-				if ((tokenSecret = properties.getProperty(aTokenSecret)) != null)
-					read += TOKEN_TYPE;
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					fis.close();
-				} catch (Exception ignore) {
-				}
+				fis.close();
+			} catch (Exception ignore) {
 			}
 		}
 		return read;
@@ -253,23 +235,21 @@ public class Collect {
 
 	}
 
-	// Global arraylist, that will be added to
-	static ArrayList<Tweet> cleanList = new ArrayList<Tweet>();
-
 	// Method: Clean
 	// Parameters: string
 	// returns: nothing
 	// This method will be called to clean a tweet, and then
 	// add that cleaned string to the arraylist cleanList.
-	public static void Clean(String username, String text) {
+	public static Tweet Clean(String username, String text) {
 
 		String url = "(https?|http?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 		String enter = "(\\r|\\n)";
-		String randomSymbols = "[@!&*$<>;?']"; // Leaving # out of this because it precedes key words
+		String randomSymbols = "[@!&*$<>;?']"; // Leaving # out of this because
+												// it precedes key words
 		// This should block any of the profanity
 		// sorry for spelling them out here
 		String beep = "[^!@#$%^&*]*(ass|shit|butthole|cock|penis|pennis|fucker|fuck|crap|cunt|bitch|whore|bastard|vagina)[^!@#$%^&*]*";
-		
+
 		// example string original
 		// String original = "Jo!hn Doe: @#marvel is lam*e!
 		// https://www.google.com/search?q=hello&oq=hello&aqs=chrome.0.69i59j69i60j69i57j69i60j69i65j69i61.818j0j7&sourceid=chrome&es_sm=93&ie=UTF-8
@@ -279,15 +259,34 @@ public class Collect {
 		text = text.replaceAll(enter, "");
 		text = text.replaceAll(randomSymbols, "");
 		Tweet tweet = new Tweet(username, text);
-		cleanList.add(tweet);
+		return tweet;
 
 	}
 
-	public static void Print(Collect col) {
-		for (int i = 0; i < col.cleanList.size(); i++) {
-			System.out.println(col.cleanList.get(i).getUsername() + " : " + col.cleanList.get(i).getText());
+	public ArrayList<Tweet> getList() {
+		return list;
+	}
 
+	public static void main(String[] args) throws Exception {
+		for (int i = 0; i < args.length; i++) {
+			Collect col = new Collect(args[i]);
+			Cluster cluster = new Cluster(col.getList());
 		}
+
+		// col.getAccess();
+		// "https://twitter.com/search"
+		// "https://api.twitter.com/1.1/search/tweets.json"
+		// + "?q=marvel"); //https://stream.twitter.com/1.1/statuses/filter.json
+
+		// if(col.getProperties())
+		// {
+		// col.connect();
+		// System.out.println("open stream, token: " + col.token);
+		// String inputLine =
+		// }
+		// while ((inputLine = in.readLine()) != null)
+		// System.out.println(inputLine);
+		// in.close();
 	}
 
 }
