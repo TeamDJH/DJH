@@ -96,7 +96,7 @@ public class Collect {
 					list.add(tweet);
 					count++;
 				}
-			} while (count < 50);
+			} while (count < 500);
 			// Test
 			duplicateClean();
 		} catch (TwitterException te) {
@@ -239,26 +239,25 @@ public class Collect {
 		Tweet tweet = new Tweet(username, text);
 		return tweet;
 	}
-	
+
 	// testing method to clean up duplicates
 	// adds list to a set, cleans the duplicates
 	// then changes set back to list
-	public static void duplicateClean()
-	{
+	public static void duplicateClean() {
 		// Creating LinkedHashSet
-	     LinkedHashSet<Tweet> lhs = new LinkedHashSet<Tweet>();
-	 
-	     /* Adding ArrayList elements to the LinkedHashSet
-	      * in order to remove the duplicate elements and 
-	      * to preserve the insertion order.
-	      */
-	     lhs.addAll(list);
-	  
-	     // Removing ArrayList elements
-	     list.clear();
-	 
-	     // Adding LinkedHashSet elements to the ArrayList
-	     list.addAll(lhs);
+		LinkedHashSet<Tweet> lhs = new LinkedHashSet<Tweet>();
+
+		/*
+		 * Adding ArrayList elements to the LinkedHashSet in order to remove the
+		 * duplicate elements and to preserve the insertion order.
+		 */
+		lhs.addAll(list);
+
+		// Removing ArrayList elements
+		list.clear();
+
+		// Adding LinkedHashSet elements to the ArrayList
+		list.addAll(lhs);
 	}
-	
+
 }
