@@ -9,6 +9,7 @@
 	if(topicParam == null) {
 		topicParam = "";
 	} else {
+		topicParam.toLowerCase();
 		col = new Collect(topicParam);
 		clu = new Cluster(col.getList());
 		stuff = clu.getClusters();

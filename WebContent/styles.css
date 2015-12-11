@@ -16,7 +16,7 @@ header{
 	display: block;
 	width: calc(30% - 46px);
 	float: left;
-	border-style: solid;
+	//border-style: solid;
 	padding: 0px 20px;
 	
 }
